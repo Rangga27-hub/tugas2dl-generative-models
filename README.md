@@ -8,7 +8,7 @@ Fashion-MNIST: Vanilla AE, Sparse AE, VAE, Vanilla GAN, DCGAN, DDPM, dan lima ek
 
 ## Berkas utama
 
-- **[main.ipynb](main.ipynb)** — notebook mandiri: data, model, training, MLP, metrik, dan lima visualisasi. Tidak membutuhkan import `src.*`.
+- **[main.ipynb](main.ipynb)** — versi ringkas: definisi model, MLP opsional, tabel metrik dan lima gambar tersimpan. Tanpa import `src.*`.
 - **[Laporan PDF](results/report/TUGAS_DL_SESI07_2802493134_Komang%20Rangga%20Hariwijaya.pdf..pdf)** — laporan 11 halaman; nama file dipertahankan.
 - **[Tabel metrik](results/evaluation/comparison.csv)** — hasil test enam model.
 - **[Figur](results/figures/)** — lima visualisasi komparatif.
@@ -22,7 +22,9 @@ python -m pip install -r requirements.txt
 python -m jupyter lab main.ipynb
 ```
 
-Default `MODE="load"` **tidak memulai training penuh**. Checkpoint tidak disertakan di Git; jika belum tersedia, notebook menampilkan hasil tersimpan dan melewati inferensi. Untuk training ulang, ikuti pilihan mode/konfirmasi pada bagian setup notebook; gunakan folder output terpisah.
+`main.ipynb` memakai **12 cell kode (383 baris)**. Default `RUN_MLP=False`: tidak mengunduh data atau training; tabel/gambar dibaca dari hasil tersimpan. Aktifkan MLP hanya jika checkpoint asli tersedia.
+
+Untuk **training, resume, atau menghitung ulang metrik/figur**, buka [notebook lengkap](notebooks/full_pipeline.ipynb). Seluruh kemampuan sebelumnya tetap tersedia di sana; versi ringkas tidak mengklaim melakukan perhitungan tersebut.
 
 ## Hasil singkat
 

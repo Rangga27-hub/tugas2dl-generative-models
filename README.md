@@ -24,4 +24,4 @@ Default `RUN_MLP=False`: tidak mengunduh data atau training. Tabel dan gambar di
 
 Akurasi test MLP **89,76%**. FID7000: VAE **84,55**, GAN **147,31**, DCGAN **19,78**, DDPM **28,62**.
 
-Repo ini adalah versi ringkas untuk penyajian, **bukan pipeline lengkap untuk training ulang**. Source training dan bukti lengkap dicadangkan lokal; riwayat Git tetap dipertahankan. Implementasi dan penyusunan notebook dibantu AI secara transparan; tinjauan mahasiswa masih menunggu.
+Repo ini adalah versi ringkas untuk penyajian, **bukan pipeline lengkap untuk training ulang**. Source training dan bukti lengkap dicadangkan lokal; riwayat Git tetap dipertahankan. Tinjauan mahasiswa masih menunggu.

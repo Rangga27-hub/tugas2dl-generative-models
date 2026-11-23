@@ -4,8 +4,8 @@
   "draft": true,
   "page_count_ok": true,
   "fid_n": 7000,
-  "nim_present": false,
+  "nim_present": true,
   "kelas_present": false,
-  "repo_supplied": false,
+  "repo_supplied": true,
   "visual_notes_supplied": true
 }

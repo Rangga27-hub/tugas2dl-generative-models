@@ -69,12 +69,12 @@
     "draft": true,
     "page_count_ok": true,
     "fid_n": 7000,
-    "nim_present": false,
+    "nim_present": true,
     "kelas_present": false,
-    "repo_supplied": false,
+    "repo_supplied": true,
     "visual_notes_supplied": true,
     "verified_pages": 11,
-    "sha256": "a4e441fc867dca97cf5a95af5219b464f71593f2626efd4a1fd5b76ce2569bc4"
+    "sha256": "156ba2a5199b2e4b78b08ac304128751498696456c8dbd01e059590abecd1f88"
   },
   "tests": {
     "tests": 18,
@@ -82,7 +82,7 @@
     "errors": 0,
     "skipped": 0
   },
-  "code_commit_at_audit": "51b533fdb3076ce201521a511481f3262236edfa",
+  "code_commit_at_audit": "bc3dfec5af6a7e65043727f57d13f67155d92db5",
   "source_sha256_at_audit": {
     "src/__init__.py": "e99e9f60e6496cbbb6cc663a19b8a405280cfec9b07c433e55043d5d2749e4e7",
     "src/audit.py": "99bd19c315edf223544bb15104504675719d0ce535607417d8e769a656b90234",

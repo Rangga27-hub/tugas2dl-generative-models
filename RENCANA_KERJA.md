@@ -24,12 +24,14 @@ Acuan: `PRD_Tugas_DL_Sesi07_Generative_Models (1).md`. Dokumen ini menggantikan 
 - [x] Rekonstruksi seluruh test; FID N=7.000 yang sama bagi empat generator; timing seragam dan sparsity AE tercatat.
 - [x] Lima figur wajib, tujuh diagram, tabel berbasis checkpoint. Seleksi GAN/DCGAN final epoch sesuai budget pradefinisi, model lain melalui validation.
 - [x] DRAFT laporan 11 halaman, Q1–Q6, render PDF diperiksa. Audit konsistensi split/checkpoint/figur/N dan 18 tes lolos; bukan berkas final siap unggah.
-- [ ] Identitas dan repo publik dikonfirmasi pengguna; verifikasi tautan tanpa login.
+- [x] Nama dan NIM dikonfirmasi pengguna: Komang Rangga Hariwijaya, 2802493134.
+- [x] Repo publik dibuat atas permintaan pengguna: https://github.com/Rangga27-hub/tugas2dl-generative-models; akses web/API tanpa login terverifikasi.
+- [ ] Kelas, tinjauan interpretasi/endpoint dan tenggat dikonfirmasi pengguna; ekspor final dan pengumpulan.
 
 ## Risiko / batasan
 - Instalasi wheel CUDA (~3,3 GB) selesai dan GPU lolos pengujian. Benchmark dan antrean penuh tercatat pada artifacts/setup/.
 - Target >=88% MLP sudah terukur: 89,7571% pada 7.000 test. Tidak melakukan tuning berdasarkan hasil test.
 - GAN dipilih pada epoch terakhir sesuai budget yang ditetapkan melalui pilot; tidak memilih berdasarkan test/FID final. Evaluasi generator secara terpisah dari rekonstruksi.
 - Resume deterministik pada batas epoch; log per-epoch, optimizer dan RNG disimpan. Waktu crash di tengah epoch tidak dihitung sebagai epoch selesai.
-- NIM, kelas, tenggat resmi, dan URL GitHub belum tersedia. Tidak membuat identitas/tautan palsu atau melakukan publikasi tanpa konfirmasi.
-- Bukti aktual diekspor ke results/ beserta manifest SHA-256. PDF masih draft; NIM, kelas, GitHub publik, persetujuan interpretasi/endpoint dan tenggat belum diverifikasi. GitHub CLI tidak tersedia dan belum ada remote publik yang dipasang.
+- NIM 2802493134 dan nama sudah diberikan pengguna. Kelas, tenggat serta tinjauan pengguna masih belum tersedia; tidak mengisinya dengan dugaan.
+- Bukti aktual diekspor ke results/ beserta manifest SHA-256. PDF masih draft sampai kelas dan persetujuan interpretasi/endpoint lengkap. GitHub CLI lokal tersedia di artifacts/setup/gh (diabaikan Git); remote origin mengarah ke repo publik Rangga27-hub/tugas2dl-generative-models. Kredensial dipakai melalui Git Credential Manager tanpa dicatat dalam berkas proyek.

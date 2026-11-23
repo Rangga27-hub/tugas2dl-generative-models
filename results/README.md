@@ -33,8 +33,8 @@ Interpretasi dibatasi satu seed dan budget ini: DCGAN memiliki FID terbaik pada 
 
 ## Belum selesai / perlu pengguna
 
-1. Isi **NIM dan kelas**; konfirmasi tenggat resmi.
-2. Buat/konfirmasi **GitHub publik**, pasang URL aktif di halaman judul, verifikasi tanpa login. Belum ada publikasi atau remote yang diklaim.
+1. **Nama dan NIM sudah diisi:** Komang Rangga Hariwijaya, **2802493134**. Kelas dan tenggat resmi belum dikonfirmasi.
+2. Repo publik: https://github.com/Rangga27-hub/tugas2dl-generative-models — URL sudah dipasang di draft dan akses tanpa login diverifikasi.
 3. Periksa endpoint GAN dan interpretasi; flag verifikasi sengaja belum diisi `true` tanpa persetujuan pengguna.
 4. Ekspor kandidat final dengan nama resmi setelah identitas/verifikasi lengkap, lalu periksa PDF dan unggah sendiri.
 

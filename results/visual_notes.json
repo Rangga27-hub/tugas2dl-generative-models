@@ -12,5 +12,5 @@
   "dcgan": "Snapshot membaik dari epoch 1 ke 20/40; variasi bentuk tampak, sebagian artefak tersisa.",
   "ddpm": "Noise MSE turun; reverse chain membentuk objek, tetapi detail beberapa sampel terdistorsi.",
   "gan_endpoints_visually_verified": false,
-  "github_public_verified": false
+  "github_public_verified": true
 }

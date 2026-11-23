@@ -4,7 +4,11 @@ Fashion-MNIST: Vanilla AE, Sparse AE, VAE, Vanilla GAN, DCGAN, DDPM, serta lima 
 
 **Status run aktual:** enam model, MLP, frozen decoder, evaluasi test dan lima figur selesai. Akurasi test MLP **89,76%**. FID N=7.000: VAE **84,55**, Vanilla GAN **147,31**, DCGAN **19,78**, DDPM **28,62**. Angka hanya berlaku pada konfigurasi dan satu seed run ini.
 
-**Laporan masih DRAFT (11 halaman)**: NIM, kelas, URL GitHub publik, tenggat dan persetujuan interpretasi perlu dilengkapi. Implementasi dan inspeksi visual dibantu AI secara transparan. Bukti kecil tersedia di [`results/`](results/README.md), termasuk [draft PDF](results/report/DRAFT_Laporan.pdf), lima figur dan tabel; checkpoint dan fitur test lokal tetap di `artifacts/fashion/`. Semua angka berasal dari run aktual, bukan pretrained generator atau hasil fiktif.
+**Mahasiswa:** Komang Rangga Hariwijaya · **NIM 2802493134** · kelas belum diisi.
+
+**Repositori publik:** https://github.com/Rangga27-hub/tugas2dl-generative-models
+
+**Laporan masih DRAFT (11 halaman)**: kelas, tenggat dan tinjauan/persetujuan interpretasi oleh mahasiswa belum dilengkapi. Implementasi dan inspeksi visual dibantu AI secara transparan. Bukti kecil tersedia di [`results/`](results/README.md), termasuk [draft PDF](results/report/DRAFT_Laporan.pdf), lima figur dan tabel; checkpoint dan fitur test lokal tetap di `artifacts/fashion/`. Semua angka berasal dari run aktual, bukan pretrained generator atau hasil fiktif.
 
 ## Setup Windows (PowerShell)
 

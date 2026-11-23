@@ -2,7 +2,9 @@
 
 Fashion-MNIST: Vanilla AE, Sparse AE, VAE, Vanilla GAN, DCGAN, DDPM, serta lima eksperimen MLP. Acuan: [`PRD_Tugas_DL_Sesi07_Generative_Models (1).md`](PRD_Tugas_DL_Sesi07_Generative_Models%20%281%29.md).
 
-**Status:** implementasi dibantu AI. Hasil hanya sah dari checkpoint/log run aktual; keberadaan kode tidak berarti training atau target akurasi sudah tercapai. Lihat `RENCANA_KERJA.md` dan `artifacts/` lokal untuk bukti. NIM, kelas, URL repo publik, serta tenggat perlu dikonfirmasi. Tidak ada hasil/pretrained model yang diklaim sebagai hasil eksperimen sendiri.
+**Status run aktual:** enam model, MLP, frozen decoder, evaluasi test dan lima figur selesai. Akurasi test MLP **89,76%**. FID N=7.000: VAE **84,55**, Vanilla GAN **147,31**, DCGAN **19,78**, DDPM **28,62**. Angka hanya berlaku pada konfigurasi dan satu seed run ini.
+
+**Laporan masih DRAFT (11 halaman)**: NIM, kelas, URL GitHub publik, tenggat dan persetujuan interpretasi perlu dilengkapi. Implementasi dan inspeksi visual dibantu AI secara transparan. Bukti kecil tersedia di [`results/`](results/README.md), termasuk [draft PDF](results/report/DRAFT_Laporan.pdf), lima figur dan tabel; checkpoint dan fitur test lokal tetap di `artifacts/fashion/`. Semua angka berasal dari run aktual, bukan pretrained generator atau hasil fiktif.
 
 ## Setup Windows (PowerShell)
 
@@ -51,7 +53,7 @@ Subset FID bila runtime terlalu besar: `python -m src.run evaluate --fid-n 1000`
 .\.venv\Scripts\python -m src.train --model mlp --resume --epochs 35
 ```
 
-Resume pada batas epoch, termasuk optimizer dan RNG Python/NumPy/torch/CUDA. Run yang sudah ada tidak ditimpa tanpa `--resume`. Hyperparameter dan split harus identik. History checkpoint adalah sumber kebenaran setelah crash; CSV/JSON ditulis ulang pada epoch berikutnya. Jangan memuat checkpoint dari sumber tidak tepercaya karena berisi pickle/RNG state.
+Resume pada batas epoch, termasuk optimizer dan RNG Python/NumPy/torch/CUDA. Kesetaraan bitwise resume vs run utuh diuji pada fixture CPU; seed tetap bukan jaminan bitwise lintas GPU, versi pustaka, atau platform. Run yang sudah ada tidak ditimpa tanpa `--resume`. Hyperparameter dan split harus identik. History checkpoint adalah sumber kebenaran setelah crash; CSV/JSON ditulis ulang pada epoch berikutnya. Jangan memuat checkpoint dari sumber tidak tepercaya karena berisi pickle/RNG state.
 
 ## Kontrak eksperimen
 

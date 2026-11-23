@@ -34,7 +34,7 @@ def schematic(title, nodes):
     for i, text in enumerate(nodes):
         x = i * (box_width + gap)
         d.add(Rect(x, 8, box_width, 28, rx=3, ry=3, fillColor=colors.HexColor("#edf3fb"), strokeColor=colors.HexColor("#5276a1")))
-        d.add(String(x + box_width / 2, 19, text, textAnchor="middle", fontName="Body", fontSize=7))
+        d.add(String(x + box_width / 2, 19, text, textAnchor="middle", fontName="Body", fontSize=8))
         if i < len(nodes)-1:
             end = x + box_width + gap - 2
             d.add(Line(x + box_width, 22, end, 22, strokeColor=colors.HexColor("#5276a1")))
@@ -91,15 +91,19 @@ def main():
     if len(n_values) != 1:
         raise ValueError("FID N/subset must match across four generators")
     n_fid = next(iter(n_values))[0]
+    if args.notes:
+        save_json(root / "visual_notes.json", notes)
+        from .evaluate import write_table
+        write_table(cfg)
     font = fm.findfont("DejaVu Sans")
     bold = fm.findfont(fm.FontProperties(family="DejaVu Sans", weight="bold"))
     pdfmetrics.registerFont(TTFont("Body", font))
     pdfmetrics.registerFont(TTFont("BodyBold", bold))
     pdfmetrics.registerFontFamily("Body", normal="Body", bold="BodyBold", italic="Body", boldItalic="BodyBold")
     styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="TextID", fontName="Body", fontSize=9, leading=13, spaceAfter=8))
+    styles.add(ParagraphStyle(name="TextID", fontName="Body", fontSize=10, leading=14.5, spaceAfter=8))
     styles.add(ParagraphStyle(name="HeadID", fontName="BodyBold", fontSize=14, leading=18, spaceAfter=12))
-    styles.add(ParagraphStyle(name="SmallID", fontName="Body", fontSize=7, leading=10, spaceAfter=6))
+    styles.add(ParagraphStyle(name="SmallID", fontName="Body", fontSize=7.5, leading=10.5, spaceAfter=6))
     styles.add(ParagraphStyle(name="TitleID", fontName="BodyBold", fontSize=21, leading=28, alignment=TA_CENTER, spaceAfter=20))
     story = []
     def p(text, style="TextID"):
@@ -181,7 +185,7 @@ def main():
     p("Tahap 1 melatih 784→256→64→10 dan menyimpan W1 (256×784), W2 (64×256), W3 (10×64), serta z=ReLU(W2 ReLU(W1x+b1)+b2). Validation memilih checkpoint; test dipakai untuk pelaporan akhir.")
     p("Tahap 2: sigmoid(W1ᵀ ReLU(W2ᵀ ReLU(W3ᵀ onehot(y)))). Tahap 3: sigmoid(W1ᵀ ReLU(W2ᵀ z_test)). Transpose bukan invers. Untuk W berukuran m×n dengan m&lt;n, rank(WᵀW)≤m&lt;n sehingga WᵀW tidak dapat menjadi I_n di seluruh ruang input. ReLU juga memetakan semua nilai negatif menjadi nol, menambah ketidakbalikan. Bias tidak dipakai pada proyeksi balik sesuai formula eksperimen.")
     p("Tahap 4: classifier dibekukan seluruhnya; decoder 64→256→784 dilatih hanya pada train dengan MSE. Checkpoint dipilih dari validation lalu dibandingkan dengan Vanilla AE laten64 pada test yang sama. SHA classifier disimpan dalam checkpoint decoder untuk mencegah pembanding dari encoder berbeda.")
-    p("Tahap 5: setelah decoder dikunci, hitung mu_j dan sigma_j populasi dari aktivasi test. Sampel z_j=mu_j+sigma_j epsilon_j secara independen lalu decode. Ini analisis akhir yang memakai statistik test secara eksplisit, bukan generator terlatih dengan prior Gaussian. Tidak digunakan tuning atau FID empat generator. Asumsi diagonal mengabaikan korelasi dan multimodalitas kelas.")
+    p("Tahap 5: setelah decoder dikunci, hitung mu_j dan sigma_j populasi dari aktivasi test. Sampel z_j=mu_j+sigma_j epsilon_j secara independen lalu decode. Ini analisis akhir yang memakai statistik test secara eksplisit, bukan generator terlatih dengan prior Gaussian. Tidak digunakan tuning atau FID empat generator. Asumsi diagonal mengabaikan korelasi dan multimodalitas kelas; Gaussian juga dapat menghasilkan nilai negatif di luar support fitur ReLU.")
     p("Seleksi checkpoint: max validation accuracy MLP; min validation objective AE/Sparse/VAE/decoder; min fixed-noise validation MSE DDPM. Random draw validation dikunci agar perbandingan antar-epoch konsisten. Best dan last, optimizer, konfigurasi, RNG dan log per epoch disimpan untuk resume.")
     page()
 
@@ -250,24 +254,36 @@ def main():
     h("VI. Pembahasan Q1–Q3")
     best_mse = min(("ae", "sparse_ae", "vae"), key=lambda n: metric(n,"MSE"))
     best_fid = min(("vae", "gan", "dcgan", "ddpm"), key=lambda n: evaluation[n]["fid"]["FID"])
-    p(f"<b>Q1 — Fidelitas dan kualitas generatif.</b> MSE terendah pada run ini: {labels[best_mse]} ({metric(best_mse,'MSE'):.5f}); FID terendah: {labels[best_fid]} ({evaluation[best_fid]['fid']['FID']:.2f}, N={n_fid}). Ranking ini dibatasi checkpoint, budget training, satu seed dan feature extractor yang sama. MSE mengukur kesalahan berpasangan; FID mengukur distribusi fitur dan tidak boleh ditafsirkan sebagai error rekonstruksi GAN/DDPM.")
-    p(f"Fraksi aktivasi laten |z|&lt;{cfg['sparsity_threshold']}: Vanilla AE={100*evaluation['ae']['reconstruction']['latent_near_zero_fraction']:.2f}%, Sparse AE={100*evaluation['sparse_ae']['reconstruction']['latent_near_zero_fraction']:.2f}% pada lambda={cfg['sparse_lambda']}. Laporkan efek trade-off rekonstruksi dan sparsity berdasarkan angka ini, bukan mengasumsikan penalti selalu meningkatkan kualitas.")
-    p("<b>Q2 — Blur, ketajaman, dan objective.</b> Untuk squared error, estimator optimal bersyarat adalah E[x|z]; bila beberapa detail berbeda dipetakan ke kode yang sama, perataan dapat mengaburkan detail. VAE menambahkan kendala KL dan likelihood faktor Bernoulli sehingga trade-off kapasitas/regularisasi juga berperan. Pada GAN minimax ideal dan discriminator optimal, objective berkaitan dengan Jensen–Shannon; implementasi G non-saturating tidak identik secara numerik dengan objective minimax. Penalti L1 Sparse AE menekan aktivasi, bukan langsung menjamin tepian lebih tajam. Klaim visual harus merujuk Figur1–2 yang diperiksa.")
+    best_psnr = max(("ae", "sparse_ae", "vae"), key=lambda n: metric(n, "PSNR"))
+    best_ssim = max(("ae", "sparse_ae", "vae"), key=lambda n: metric(n, "SSIM"))
+    p(f"<b>Q1 — Fidelitas dan kualitas generatif.</b> MSE terendah pada run ini: {labels[best_mse]} ({metric(best_mse,'MSE'):.5f}); PSNR tertinggi: {labels[best_psnr]} ({metric(best_psnr,'PSNR'):.2f} dB); SSIM tertinggi: {labels[best_ssim]} ({metric(best_ssim,'SSIM'):.4f}). FID terendah: {labels[best_fid]} ({evaluation[best_fid]['fid']['FID']:.2f}, N={n_fid}). Ranking ini dibatasi checkpoint, budget training, satu seed dan feature extractor yang sama. MSE mengukur kesalahan berpasangan; FID mengukur distribusi fitur dan tidak boleh ditafsirkan sebagai error rekonstruksi GAN/DDPM.")
+    p(f"Fraksi aktivasi laten |z|&lt;{cfg['sparsity_threshold']}: Vanilla AE={100*evaluation['ae']['reconstruction']['latent_near_zero_fraction']:.2f}%, Sparse AE={100*evaluation['sparse_ae']['reconstruction']['latent_near_zero_fraction']:.2f}% pada lambda={cfg['sparse_lambda']}. Perubahan ini perlu dibaca bersama MSE/SSIM pada Tabel IV: lebih banyak aktivasi mendekati nol tidak otomatis berarti fidelitas rekonstruksi lebih baik.")
+    p("<b>Q2 — Blur, ketajaman, dan objective.</b> Untuk squared error, estimator optimal bersyarat adalah E[x|z]; bila beberapa detail berbeda dipetakan ke kode yang sama, perataan dapat mengaburkan detail. VAE menambahkan kendala KL dan likelihood faktor Bernoulli sehingga trade-off kapasitas/regularisasi juga berperan. Pada GAN minimax ideal dan discriminator optimal, objective berkaitan dengan Jensen–Shannon; implementasi G non-saturating tidak identik secara numerik dengan objective minimax. Penalti L1 Sparse AE menekan aktivasi, bukan langsung menjamin tepian lebih tajam. Figur1–2 memperlihatkan trade-off detail dan kehalusan pada sampel yang diperiksa; hubungan ini tidak membuktikan efek kausal setiap komponen arsitektur.")
     gan_ms = evaluation["dcgan"]["latency"]["median_ms_batch64"]
     ddpm_ms = evaluation["ddpm"]["latency"]["median_ms_batch64"]
-    p(f"<b>Q3 — Adversarial vs difusi.</b> DCGAN memerlukan {gan_ms:.2f} ms/batch64, DDPM {ddpm_ms:.2f} ms/batch64 pada perangkat yang sama; DDPM menjalankan {cfg['ddpm_steps']} denoising steps. CNN memberi bias spasial pada DCGAN, tetapi keunggulan atas GAN MLP harus didukung FID/visual aktual. Non-saturating G mengurangi saturasi objective asli, namun D terlalu kuat dan mode collapse masih mungkin. Noise prediction DDPM memiliki target supervised per timestep; keberhasilan denoising tidak membuktikan cakupan semua mode. Tidak ada estimasi ketidakpastian lintas seed, sehingga selisih kecil FID tidak boleh digeneralisasi.")
+    p(f"<b>Q3 — Adversarial vs difusi.</b> DCGAN memerlukan {gan_ms:.2f} ms/batch64, DDPM {ddpm_ms:.2f} ms/batch64 pada perangkat yang sama; DDPM menjalankan {cfg['ddpm_steps']} denoising steps. DCGAN memiliki bias spasial CNN; FID-nya {evaluation['dcgan']['fid']['FID']:.2f} dibanding {evaluation['gan']['fid']['FID']:.2f} pada GAN MLP. Perbedaan ini konsisten dengan detail visual yang lebih jelas, tetapi bukan ablation kausal terhadap konvolusi saja. Non-saturating G mengurangi saturasi objective asli, namun D terlalu kuat dan mode collapse masih mungkin. Noise prediction DDPM memiliki target supervised per timestep; keberhasilan denoising tidak membuktikan cakupan semua mode. Tidak ada estimasi ketidakpastian lintas seed, sehingga selisih kecil FID tidak boleh digeneralisasi.")
+    proxy_parts = []
+    for name in ("vae", "gan", "dcgan", "ddpm"):
+        proxy = evaluation[name]["fid"].get("predicted_label_proxy")
+        if proxy:
+            counts = proxy["counts"]
+            proxy_parts.append(f"{labels[name]}: {sum(c > 0 for c in counts)}/10 label, dominasi {100*max(counts)/sum(counts):.1f}%")
+    if proxy_parts:
+        p("Pelengkap prediksi MLP pada sampel FID: " + "; ".join(proxy_parts) + ". Ini hanya proxy; prediksi pada citra sintetis/OOD bukan label benar, dan tidak membuktikan precision, recall atau cakupan semua mode.", "SmallID")
     p("<b>Generative Trilemma.</b> Kualitas, cakupan mode, dan kecepatan sampling tidak selalu optimal bersama. GAN satu-pass cepat tetapi rawan ketidakstabilan; VAE prior teratur dan sampling ringan dengan potensi kompromi detail; DDPM memakai sampling iteratif mahal. Di sini coverage dinilai terbatas dari sampel, bukan klaim recall distribusi lengkap.")
     page()
 
     # 11 — Q4–Q6 & refs
     h("VI. Q4–Q6, batasan dan referensi")
-    p("<b>Q4.</b> Figur4 menguji enam titik pada satu pasangan endpoint. Bandingkan kontinuitas bentuk dan artefak berdasarkan observasi terverifikasi, bukan hanya kontinuitas matematis decoder. AE/Sparse tidak memiliki prior eksplisit; VAE KL mendorong keterisian sekitar prior, tanpa menjamin semua jalur realistis. Endpoint GAN dari prediksi MLP dapat bias terhadap classifier dan belum tentu mewakili kelas sebenarnya.")
+    p("<b>Q4.</b> " + escape(notes.get("interpolation") or "Observasi visual Figur4 belum diverifikasi; hasil belum dapat disimpulkan.") + " AE/Sparse tidak memiliki prior eksplisit; KL VAE mendorong keterisian sekitar prior tanpa menjamin seluruh jalur realistis. Bukti terbatas pada satu pasangan endpoint dan enam titik.")
     ae_mse, decoder_mse = mlp["vanilla_ae_metrics"]["MSE"], mlp["frozen_decoder_metrics"]["MSE"]
     p(f"<b>Q5.</b> MSE frozen decoder={decoder_mse:.5f}, Vanilla AE={ae_mse:.5f}; selisih={decoder_mse-ae_mse:+.5f}. Perbandingan laten64 menguji informasi fitur diskriminatif yang masih dapat didekode, bukan membuktikan semua detail hilang. Rank kompresif, ReLU dan objektif P(y|x) menjelaskan mengapa transpos bukan invers. Gaussian diagonal test tidak dilatih menjadi prior; kualitas tahap5 hanya berlaku pada prosedur tersebut.")
-    p("<b>Q6 — Inspeksi manufaktur.</b> AE dan Sparse AE dapat memakai reconstruction error sebagai sinyal anomali, tetapi metrik test citra normal saja tidak mengukur sensitivitas cacat. Tidak ada dataset cacat manufaktur di eksperimen ini; rekomendasi masih hipotesis dan perlu validasi defect/normal serta threshold dari validation. Penalti sparsity dapat membantu representasi atau mengorbankan detail, bergantung lambda.")
+    p(f"<b>Q6 — Inspeksi manufaktur.</b> Vanilla AE memberi baseline rekonstruksi normal dengan MSE {metric('ae','MSE'):.5f}, dibanding Sparse AE {metric('sparse_ae','MSE'):.5f}. Namun error normal saja tidak mengukur sensitivitas cacat. Tidak ada dataset cacat manufaktur di eksperimen ini; pemilihan industrial masih hipotesis dan memerlukan validasi defect/normal serta threshold dari validation. Sparsity dapat membantu representasi atau mengorbankan detail, bergantung lambda.")
     mobile = ", ".join(f"{labels[n]}={evaluation[n]['latency']['median_ms_batch64']:.2f}" for n in ("vae","gan","dcgan"))
-    p("<b>Avatar mobile.</b> Latensi laptop batch64 (ms): " + mobile + ". Anggaran 30ms mobile harus diuji single-image end-to-end pada perangkat target; timing laptop atau pembagian waktu batch dengan64 bukan bukti memenuhi SLA mobile. Pertimbangkan memori, energi, transfer dan konversi model.")
-    p(f"<b>Aset visual.</b> DCGAN vs DDPM: FID {evaluation['dcgan']['fid']['FID']:.2f} vs {evaluation['ddpm']['fid']['FID']:.2f}. Pilih sesuai kualitas visual terverifikasi dan biaya sampling pada T tercatat; benchmark grayscale28×28 tidak memvalidasi kemampuan avatar/aset RGB resolusi tinggi. Uji ulang domain, lisensi data dan resolusi target diperlukan.")
+    mobile_winner = min(("vae", "gan", "dcgan"), key=lambda n: evaluation[n]["fid"]["FID"])
+    p("<b>Avatar mobile.</b> Latensi laptop batch64 (ms): " + mobile + ". " + labels[mobile_winner] + " memberi FID terendah di antara ketiga kandidat sehingga menjadi kandidat kualitas. Namun anggaran 30ms harus diuji single-image end-to-end pada perangkat mobile; timing laptop atau pembagian waktu batch dengan64 bukan bukti memenuhi SLA. Validasi juga mencakup memori, energi, transfer dan konversi model.")
+    asset_winner = min(("dcgan", "ddpm"), key=lambda n: evaluation[n]["fid"]["FID"])
+    p(f"<b>Aset visual.</b> DCGAN vs DDPM: FID {evaluation['dcgan']['fid']['FID']:.2f} vs {evaluation['ddpm']['fid']['FID']:.2f}. {labels[asset_winner]} menjadi kandidat berdasarkan FID pada run ini, dengan keputusan akhir tetap mempertimbangkan detail visual dan biaya sampling; keunggulan DDPM tidak diasumsikan dari teori. Benchmark grayscale28×28 tidak memvalidasi avatar/aset RGB resolusi tinggi. Uji ulang domain, lisensi data dan resolusi target diperlukan.")
     p("<b>Batasan.</b> Satu seed, budget berbeda antararsitektur, seleksi GAN final epoch, FID ImageNet pada domain kecil, serta kemungkinan bias classifier sintetis membatasi generalisasi. Catatan visual yang belum lengkap membuat berkas tetap draft.", "SmallID")
     p("<b>Referensi.</b> Kingma &amp; Welling (2014), Auto-Encoding Variational Bayes, arXiv:1312.6114. Goodfellow et al. (2014), GANs, arXiv:1406.2661. Radford et al. (2016), DCGAN, arXiv:1511.06434. Ho et al. (2020), DDPM, arXiv:2006.11239. Heusel et al. (2017), TTUR/FID, arXiv:1706.08500. Xiao et al. (2017), Fashion-MNIST, arXiv:1708.07747. Xiao, Kreis &amp; Vahdat (2022), Generative Learning Trilemma, arXiv:2112.07804. Dokumentasi PyTorch, torchvision, TorchMetrics dan torch-fidelity; tautan di README.", "SmallID")
 

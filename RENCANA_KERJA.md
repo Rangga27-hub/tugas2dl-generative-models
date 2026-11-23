@@ -19,17 +19,17 @@ Acuan: `PRD_Tugas_DL_Sesi07_Generative_Models (1).md`. Dokumen ini menggantikan 
 - [x] Split tersimpan dan terbukti disjoint serta reproduksibel; SHA-256 tercatat pada artifacts/fashion/data.json.
 - [x] Uji mini semua model: bentuk, finite loss, update bobot, checkpoint/resume; tes dan smoke run aktual lolos.
 - [x] Benchmark DDPM satu epoch + sampling batch 64 + extractor FID. Train 7,57 s/epoch; sampling 1,35 s/batch64, estimasi 148 s untuk sampling 7.000 citra, belum extractor.
-- [ ] Training enam model, MLP, frozen decoder; log dan best/last checkpoint.
-- [ ] Lima tahap MLP, termasuk bobot, fitur test dan statistik Gaussian diagonal.
-- [ ] Rekonstruksi seluruh test; FID, timing seragam, sparsity AE.
-- [ ] Lima figur wajib, tujuh diagram, tabel berbasis checkpoint yang dipilih validation.
-- [ ] Laporan 10–12 halaman, Q1–Q6, audit PDF.
+- [x] Training enam model, MLP, frozen decoder; log dan best/last checkpoint. Epoch: MLP25, DDPM30, AE20, Sparse20, VAE25, GAN40, DCGAN40, decoder20.
+- [x] Lima tahap MLP, termasuk bobot, fitur test dan statistik Gaussian diagonal. Akurasi test 89,7571%; target tercapai, classifier dipilih dari validation epoch24.
+- [x] Rekonstruksi seluruh test; FID N=7.000 yang sama bagi empat generator; timing seragam dan sparsity AE tercatat.
+- [x] Lima figur wajib, tujuh diagram, tabel berbasis checkpoint. Seleksi GAN/DCGAN final epoch sesuai budget pradefinisi, model lain melalui validation.
+- [x] DRAFT laporan 11 halaman, Q1–Q6, render PDF diperiksa. Audit konsistensi split/checkpoint/figur/N dan 18 tes lolos; bukan berkas final siap unggah.
 - [ ] Identitas dan repo publik dikonfirmasi pengguna; verifikasi tautan tanpa login.
 
 ## Risiko / batasan
 - Instalasi wheel CUDA (~3,3 GB) selesai dan GPU lolos pengujian. Benchmark dan antrean penuh tercatat pada artifacts/setup/.
-- Target >=88% MLP adalah kriteria, bukan hasil yang dijanjikan.
+- Target >=88% MLP sudah terukur: 89,7571% pada 7.000 test. Tidak melakukan tuning berdasarkan hasil test.
 - GAN dipilih pada epoch terakhir sesuai budget yang ditetapkan melalui pilot; tidak memilih berdasarkan test/FID final. Evaluasi generator secara terpisah dari rekonstruksi.
 - Resume deterministik pada batas epoch; log per-epoch, optimizer dan RNG disimpan. Waktu crash di tengah epoch tidak dihitung sebagai epoch selesai.
 - NIM, kelas, tenggat resmi, dan URL GitHub belum tersedia. Tidak membuat identitas/tautan palsu atau melakukan publikasi tanpa konfirmasi.
-- PDF final dan angka tidak dinyatakan selesai sebelum evidence benar-benar tersedia.
+- Bukti aktual diekspor ke results/ beserta manifest SHA-256. PDF masih draft; NIM, kelas, GitHub publik, persetujuan interpretasi/endpoint dan tenggat belum diverifikasi. GitHub CLI tidak tersedia dan belum ada remote publik yang dipasang.

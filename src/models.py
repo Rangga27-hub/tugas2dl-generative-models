@@ -182,7 +182,7 @@ class DDPM(nn.Module):
     @torch.no_grad()
     def sample(self, x, generator=None, snapshots=False):
         chain = {self.steps: x[:1].detach().cpu()} if snapshots else {}
-        keep = {0, self.steps // 4, self.steps // 2, 3 * self.steps // 4}
+        keep = {0, self.steps // 16, self.steps // 4, self.steps // 2, 3 * self.steps // 4}
         for i in reversed(range(self.steps)):
             t = torch.full((len(x),), i, device=x.device, dtype=torch.long)
             eps = self.denoiser(x, t)

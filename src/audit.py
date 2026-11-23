@@ -35,6 +35,8 @@ def main():
     if sha256(split_file) != data["split_sha256"]:
         raise ValueError("Persisted split changed")
     artifacts = [root / "data.json", root / "benchmark_ddpm.json"]
+    if (root / "visual_notes.json").exists():
+        artifacts.append(root / "visual_notes.json")
     summary = {"dataset": cfg["dataset"], "seed": cfg["seed"], "split_sha256": data["split_sha256"],
                "config_sha256": sha256(args.config), "model_runs": {}, "warnings": []}
     for name in ("mlp", "ae", "sparse_ae", "vae", "gan", "dcgan", "ddpm", "decoder"):
@@ -114,6 +116,7 @@ def main():
     else:
         summary["warnings"].append("JUnit test evidence not found")
     summary["code_commit_at_audit"] = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+    summary["source_sha256_at_audit"] = {str(p).replace("\\", "/"): sha256(p) for p in sorted(Path("src").glob("*.py"))}
     save_json(root / "audit.json", summary)
     if args.export:
         destination = Path(args.destination)
@@ -124,7 +127,7 @@ def main():
             target = destination / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
-            exports[str(relative)] = sha256(target)
+            exports[relative.as_posix()] = sha256(target)
         for source, relative in [(split_file, Path("protocol") / split_file.name),
                                  (Path(args.config), Path("protocol/config.json")),
                                  (Path("requirements-lock.txt"), Path("protocol/requirements-lock.txt")),
@@ -133,7 +136,7 @@ def main():
                 target = destination / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, target)
-                exports[str(relative)] = sha256(target)
+                exports[relative.as_posix()] = sha256(target)
         save_json(destination / "audit.json", summary)
         save_json(destination / "manifest.json", exports)
     print(json.dumps(summary, indent=2), flush=True)

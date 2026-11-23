@@ -8,3 +8,5 @@
 *.pdf binary
 *.npy binary
 *.npz binary
+# Preserve byte-exact exported evidence and SHA-256 manifests on every platform.
+results/** -text

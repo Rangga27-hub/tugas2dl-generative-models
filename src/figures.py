@@ -23,7 +23,7 @@ def image(ax, tensor, title=None):
     ax.set_xticks([])
     ax.set_yticks([])
     if title:
-        ax.set_title(title, fontsize=9)
+        ax.set_title(title, fontsize=11)
 
 
 def grid(ax, tensor, nrow=4, title=None):
@@ -31,7 +31,7 @@ def grid(ax, tensor, nrow=4, title=None):
     ax.imshow(data.permute(1, 2, 0).numpy(), vmin=0, vmax=1)
     ax.axis("off")
     if title:
-        ax.set_title(title, fontsize=10)
+        ax.set_title(title, fontsize=12)
 
 
 def export(fig, root, name):
@@ -61,7 +61,7 @@ def main(cfg):
         values = x if name == "original" else reconstruct(name, models[name], x)
         for col in range(8):
             image(axes[row, col], values[col])
-        axes[row, 0].set_ylabel("Original" if row == 0 else LABELS[name], fontsize=9)
+        axes[row, 0].set_ylabel("Original" if row == 0 else LABELS[name], fontsize=11)
     fig.suptitle("Figur 1 — Rekonstruksi citra test yang sama")
     fig.tight_layout()
     export(fig, out, "figure_1_reconstruction")
@@ -77,15 +77,18 @@ def main(cfg):
     export(fig, out, "figure_2_sampling")
     atomic_torch_save(samples, out / "samples.pt")
 
-    fig, axes = plt.subplots(2, 2, figsize=(12, 8))
-    grid(axes[0, 0], mlp["originals"], 10, "A. Original test (10 citra)")
-    grid(axes[0, 1], torch.cat([mlp["class_transpose"], mlp["latent_transpose"]]), 10,
-         "B. Transpos kelas 0–9 (atas); transpos laten test (bawah)")
-    grid(axes[1, 0], torch.cat([mlp["frozen_reconstruction"], mlp["ae_reconstruction"]]), 10,
-         "C. Frozen decoder (atas); Vanilla AE laten 64 (bawah)")
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    grid(axes[0, 0], mlp["originals"], 5, "A. Original test (10 citra)")
+    grid(axes[0, 1], torch.cat([mlp["class_transpose"], mlp["latent_transpose"]]), 5,
+         "B. Transpos kelas (2 baris atas)\nTranspos laten test (2 baris bawah)")
+    grid(axes[1, 0], torch.cat([mlp["frozen_reconstruction"], mlp["ae_reconstruction"]]), 5,
+         "C. Frozen decoder (2 baris atas)\nVanilla AE laten64 (2 baris bawah)")
     grid(axes[1, 1], mlp["diagonal_gaussian_samples"], 4,
-         "D. Gaussian diagonal dari statistik fitur test (analisis akhir)")
+         "D. Gaussian diagonal fitur test\nStatistik test, analisis akhir")
+    for ax in axes.flat:
+        ax.set_anchor("N")
     fig.suptitle("Figur 3 — Lima tahap eksperimen MLP")
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
     export(fig, out, "figure_3_mlp")
 
     # Same true test endpoints for AE/VAE; contrasting Fashion-MNIST classes 0 and 9.
@@ -130,7 +133,7 @@ def main(cfg):
         interpolation_tensors[name] = values.cpu()
         for col in range(6):
             image(axes[row, col], values[col], f"α={col/5:.1f}" if row == 0 else None)
-        axes[row, 0].set_ylabel(LABELS[name], fontsize=9)
+        axes[row, 0].set_ylabel(LABELS[name], fontsize=11)
     fig.suptitle("Figur 4 — Interpolasi linear; endpoint kelas 0 vs 9")
     fig.tight_layout()
     export(fig, out, "figure_4_interpolation")
@@ -152,10 +155,11 @@ def main(cfg):
             if name == "vae":
                 ax.plot(epoch, [h["train_recon_bce_sum"] for h in history], label="BCE")
                 ax.plot(epoch, [h["train_kl_sum"] for h in history], label="KL")
-        ax.set_title(LABELS[name], fontsize=10)
-        ax.set_xlabel("epoch", fontsize=8)
-        ax.set_ylabel("loss (model-specific)", fontsize=8)
-        ax.legend(fontsize=7)
+        ax.set_title(LABELS[name], fontsize=14)
+        ax.set_xlabel("epoch", fontsize=12)
+        ax.set_ylabel("loss (model-specific)", fontsize=11)
+        ax.tick_params(labelsize=11)
+        ax.legend(fontsize=11)
         ax.grid(alpha=0.2)
     gen = torch.Generator(device=device).manual_seed(cfg["seed"] + 18000)
     noise = make_noise("ddpm", 1, cfg, device, gen)

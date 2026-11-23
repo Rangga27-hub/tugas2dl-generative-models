@@ -1,0 +1,101 @@
+{
+  "dataset": "FashionMNIST",
+  "seed": 42,
+  "split_sha256": "7292422712319657732b8e2636091a27a06b0a293aa1d729efc36be1802a4618",
+  "config_sha256": "e1a1e8a18f3e7f987e4399c1772794e212fd660180e587d996e5d2255a9226ff",
+  "model_runs": {
+    "mlp": {
+      "completed_epochs": 25,
+      "selected_epoch": 24,
+      "best_checkpoint_sha256": "a5eb8f313b63c273f554520e22b2bfacd44b1dd1664cc3498614c320e35257d1",
+      "checkpoint_local_path": "artifacts\\fashion\\mlp\\best.pt"
+    },
+    "ae": {
+      "completed_epochs": 20,
+      "selected_epoch": 20,
+      "best_checkpoint_sha256": "42029e678fcdc6fbe69d6007b8e58746946c7b9f9e07e2da6a03242ed1d90fdd",
+      "checkpoint_local_path": "artifacts\\fashion\\ae\\best.pt"
+    },
+    "sparse_ae": {
+      "completed_epochs": 20,
+      "selected_epoch": 20,
+      "best_checkpoint_sha256": "8b90275677de2cb4b6d9b1aec638fce3774a9cd968f4760e73b43633dd45ab0c",
+      "checkpoint_local_path": "artifacts\\fashion\\sparse_ae\\best.pt"
+    },
+    "vae": {
+      "completed_epochs": 25,
+      "selected_epoch": 25,
+      "best_checkpoint_sha256": "82334d9bb748771f9e813a2acca1af85d615e0dc984e07e693a6dcc163039218",
+      "checkpoint_local_path": "artifacts\\fashion\\vae\\best.pt"
+    },
+    "gan": {
+      "completed_epochs": 40,
+      "selected_epoch": 40,
+      "best_checkpoint_sha256": "a75817bf7ae73158bb9b2ef2fb0a6c5df3c36589c7ea2a2c26f55c9be12567ec",
+      "checkpoint_local_path": "artifacts\\fashion\\gan\\best.pt"
+    },
+    "dcgan": {
+      "completed_epochs": 40,
+      "selected_epoch": 40,
+      "best_checkpoint_sha256": "c2599df0125e8cd4f6e2b95c351f799280da3775a4388ebb9155e0b0eafe43ff",
+      "checkpoint_local_path": "artifacts\\fashion\\dcgan\\best.pt"
+    },
+    "ddpm": {
+      "completed_epochs": 30,
+      "selected_epoch": 30,
+      "best_checkpoint_sha256": "380b565247fa6d9e7b6b4a19f111686a3069368c94ed2d92e024d668cf1f962c",
+      "checkpoint_local_path": "artifacts\\fashion\\ddpm\\best.pt"
+    },
+    "decoder": {
+      "completed_epochs": 20,
+      "selected_epoch": 20,
+      "best_checkpoint_sha256": "ddfea2c915af0a87240a8d4bd39d773499e934b79ddca44d7b93f2c38b67ba8b",
+      "checkpoint_local_path": "artifacts\\fashion\\decoder\\best.pt"
+    }
+  },
+  "warnings": [
+    "Report is DRAFT: not submission-ready; verify notes, identity, public GitHub URL and PDF render"
+  ],
+  "fid_protocol": {
+    "n_real": 7000,
+    "n_synthetic": 7000,
+    "subset_sha256": "ad72533e21ffff12b7045f38dfcc1dbdcc4ec7d2e3cec97d71e3b8cfb17f74f0"
+  },
+  "mlp_test_accuracy": 0.8975714285714286,
+  "mlp_target_met": true,
+  "report": {
+    "pdf": "artifacts\\fashion\\report\\DRAFT_Laporan.pdf",
+    "pages": 11,
+    "draft": true,
+    "page_count_ok": true,
+    "fid_n": 7000,
+    "nim_present": false,
+    "kelas_present": false,
+    "repo_supplied": false,
+    "visual_notes_supplied": true,
+    "verified_pages": 11,
+    "sha256": "a4e441fc867dca97cf5a95af5219b464f71593f2626efd4a1fd5b76ce2569bc4"
+  },
+  "tests": {
+    "tests": 18,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "code_commit_at_audit": "51b533fdb3076ce201521a511481f3262236edfa",
+  "source_sha256_at_audit": {
+    "src/__init__.py": "e99e9f60e6496cbbb6cc663a19b8a405280cfec9b07c433e55043d5d2749e4e7",
+    "src/audit.py": "99bd19c315edf223544bb15104504675719d0ce535607417d8e769a656b90234",
+    "src/benchmark.py": "4eabb1a532708b6c4aa4366967aec59420a6db6110313a048fc37cf2e2084463",
+    "src/common.py": "80d229296f63026c864ee4c3d1f8c84a5d46eaa0915122cc0d485f848fc74ad1",
+    "src/data.py": "a538b3f976d4c8ff459522db056926bccc2556f0512bc7af2085802a72a774a0",
+    "src/evaluate.py": "5c425b8e6956231f089f742eccd97baf00ca27c48dbd507b4fdb09643c8c1fa2",
+    "src/figures.py": "a8aa2f2ef84a169c351af58868c729c6dba7ba5bd1b1abbeb672c26580d461f8",
+    "src/mlp_experiments.py": "595b577cff159873fcd3c216742aa14dfc2386e4e207839488490ca137ba1f9f",
+    "src/models.py": "2a5872daa166cb350c71a19fbc86819c2c06b09bb80a1c2f54e195226064c615",
+    "src/render_report.py": "2da2ad0b386d7a47e9f417fc98a65eec4b99dc298429d067c720e6943868699b",
+    "src/report.py": "e75d5e927195edeae5daa7c8d45df6f0f329a75f9449371b5c03453152c15b24",
+    "src/run.py": "542f5f5865b6e7514ee753a050d910f9c31524c6332a5c3a5814d576db6584c7",
+    "src/train.py": "dc231093d26e9c55391dee33a3604b4b4f5d901a52c62e7361d6abaf29dceea4"
+  }
+}

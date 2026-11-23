@@ -1,0 +1,7 @@
+model,latent_dim,seconds_epoch,ms_batch64,MSE,PSNR,SSIM,FID,FID_N,stability
+ae,64,1.8095563599992601,0.3260500088799745,0.0085148936919868,21.719461127826147,0.827706698877471,N/A,N/A,Loss train/validation turun berdekatan; tekstur halus masih hilang.
+sparse_ae,64,2.0058135400009633,0.33955000253627077,0.009928314043009388,20.98476793452672,0.8010304240690811,N/A,N/A,Objective stabil menurun; laten lebih sparse dengan error test lebih tinggi.
+vae,64,2.2087941319996025,0.22944999363971874,0.013170779351660583,19.661712242262706,0.765356014038037,84.54768371582031,7000,BCE dan objective menurun; KL tidak nol; sampel relatif blur.
+gan,100,2.9501832674999604,0.3106500007561408,N/A,N/A,N/A,147.30711364746094,7000,"Loss stabil relatif, tetapi snapshot akhir tetap berbintik; bukan bukti bebas collapse."
+dcgan,100,3.612719430000652,0.6275500054471195,N/A,N/A,N/A,19.77840805053711,7000,"Snapshot membaik dari epoch 1 ke 20/40; variasi bentuk tampak, sebagian artefak tersisa."
+ddpm,1x28x28,8.320161783334333,1343.88234999642,N/A,N/A,N/A,28.61870574951172,7000,"Noise MSE turun; reverse chain membentuk objek, tetapi detail beberapa sampel terdistorsi."

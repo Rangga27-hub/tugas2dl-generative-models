@@ -1,0 +1,42 @@
+{
+  "classes": [
+    0,
+    9
+  ],
+  "test_endpoint_indices": [
+    44968,
+    24571
+  ],
+  "alphas": [
+    0.0,
+    0.20000000298023224,
+    0.4000000059604645,
+    0.6000000238418579,
+    0.800000011920929,
+    1.0
+  ],
+  "gan_selection_seed": 17042,
+  "gan_selection_method": "2048 fixed prior candidates, select maximum MLP confidence for predicted classes 0 and 9; requires visual verification, classifier is only proxy",
+  "gan": {
+    "candidate_indices": [
+      424,
+      1463
+    ],
+    "mlp_confidence": [
+      0.9999938011169434,
+      1.0
+    ],
+    "visual_verification": "pending human inspection"
+  },
+  "dcgan": {
+    "candidate_indices": [
+      2007,
+      185
+    ],
+    "mlp_confidence": [
+      0.9999986886978149,
+      1.0
+    ],
+    "visual_verification": "pending human inspection"
+  }
+}

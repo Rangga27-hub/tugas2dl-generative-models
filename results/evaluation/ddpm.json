@@ -1,0 +1,73 @@
+{
+  "checkpoint": {
+    "checkpoint": "artifacts\\fashion\\ddpm\\best.pt",
+    "sha256": "380b565247fa6d9e7b6b4a19f111686a3069368c94ed2d92e024d668cf1f962c",
+    "selected_epoch": 30,
+    "completed_epochs": 30,
+    "mean_seconds_epoch": 8.320161783334333,
+    "timing_scope": "train+validation; excludes checkpoint/log/sample I/O",
+    "selection": "minimum fixed-noise validation MSE"
+  },
+  "environment": {
+    "python": "3.10.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "torch": "2.7.1+cu128",
+    "torchvision": "0.22.1+cu128",
+    "cuda_runtime": "12.8",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "precision": "float32",
+    "cudnn_deterministic": true
+  },
+  "split_sha256": "7292422712319657732b8e2636091a27a06b0a293aa1d729efc36be1802a4618",
+  "latency": {
+    "median_ms_batch64": 1343.88234999642,
+    "all_ms": [
+      1414.8095999989891,
+      1347.3678000009386,
+      1303.294500001357,
+      1375.7162999972934,
+      1285.433600001852,
+      1348.2240000012098,
+      1308.7807999982033,
+      1340.3968999919016,
+      1312.7003000117838,
+      1357.9816999990726
+    ],
+    "warmup": 3,
+    "repeats": 10,
+    "scope": "AE reconstruction / generators from prepared initial noise; DDPM includes full reverse chain and per-step RNG; no H2D or disk I/O",
+    "ddpm_steps": 400
+  },
+  "fid": {
+    "FID": 28.61870574951172,
+    "n_real": 7000,
+    "n_synthetic": 7000,
+    "seconds": 183.23082510000677,
+    "subset_file": "artifacts\\fashion\\evaluation\\fid_real_indices_n7000.npy",
+    "subset_sha256": "ad72533e21ffff12b7045f38dfcc1dbdcc4ec7d2e3cec97d71e3b8cfb17f74f0",
+    "feature_dim": 2048,
+    "extractor": "torch-fidelity Inception-v3 via TorchMetrics",
+    "preprocessing": "grayscale repeated RGB; float32 [0,1]; normalize=True; extractor handles resize",
+    "seed": 13042,
+    "batch_size": 64,
+    "predicted_label_proxy": {
+      "counts": [
+        449,
+        705,
+        372,
+        684,
+        404,
+        1369,
+        550,
+        1120,
+        738,
+        609
+      ],
+      "mean_confidence": 0.8692649274553571,
+      "classifier_sha256": "a5eb8f313b63c273f554520e22b2bfacd44b1dd1664cc3498614c320e35257d1",
+      "warning": "Classifier predictions on synthetic/OOD images are not true labels, nor formal precision/recall or proof of mode coverage"
+    },
+    "limitation": "ImageNet features on 28x28 grayscale; finite-sample bias, especially N<=2048; not directly comparable to other pipelines"
+  }
+}

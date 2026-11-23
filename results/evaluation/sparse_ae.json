@@ -1,0 +1,53 @@
+{
+  "checkpoint": {
+    "checkpoint": "artifacts\\fashion\\sparse_ae\\best.pt",
+    "sha256": "8b90275677de2cb4b6d9b1aec638fce3774a9cd968f4760e73b43633dd45ab0c",
+    "selected_epoch": 20,
+    "completed_epochs": 20,
+    "mean_seconds_epoch": 2.0058135400009633,
+    "timing_scope": "train+validation; excludes checkpoint/log/sample I/O",
+    "selection": "minimum validation objective"
+  },
+  "environment": {
+    "python": "3.10.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "torch": "2.7.1+cu128",
+    "torchvision": "0.22.1+cu128",
+    "cuda_runtime": "12.8",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "precision": "float32",
+    "cudnn_deterministic": true
+  },
+  "split_sha256": "7292422712319657732b8e2636091a27a06b0a293aa1d729efc36be1802a4618",
+  "reconstruction": {
+    "MSE": 0.009928314043009388,
+    "PSNR": 20.98476793452672,
+    "SSIM": 0.8010304240690811,
+    "n_test": 7000,
+    "zero_mse_images": 0,
+    "psnr_zero_policy": "clamp MSE to float32 tiny",
+    "aggregation": "mean of per-image metrics; SSIM Gaussian 11x11 sigma1.5, data_range=1",
+    "latent_near_zero_fraction": 0.5415580357142857,
+    "latent_near_zero_threshold": 0.001
+  },
+  "latency": {
+    "median_ms_batch64": 0.33955000253627077,
+    "all_ms": [
+      0.3280000091763213,
+      0.3345000004628673,
+      0.3392000071471557,
+      0.40699999954085797,
+      0.35650000791065395,
+      0.29799999902024865,
+      0.28670000028796494,
+      0.3468999930191785,
+      0.35570000181905925,
+      0.33989999792538583
+    ],
+    "warmup": 3,
+    "repeats": 10,
+    "scope": "AE reconstruction / generators from prepared initial noise; DDPM includes full reverse chain and per-step RNG; no H2D or disk I/O",
+    "ddpm_steps": null
+  }
+}

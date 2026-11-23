@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+data/
+artifacts/
+*.pt
+*.pth
+.pi/
+.env
+requirements-lock.txt

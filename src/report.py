@@ -294,7 +294,6 @@ def main():
     def footer(canvas, doc):
         canvas.setFont("Body", 8)
         canvas.setFillColor(colors.grey)
-        canvas.drawString(50, 25, "D6421 Sesi 07" + (" | DRAFT" if args.draft else ""))
         canvas.drawRightString(545, 25, str(doc.page))
     doc = SimpleDocTemplate(str(destination), pagesize=(595.28,841.89),
                             leftMargin=50, rightMargin=50, topMargin=42, bottomMargin=42,

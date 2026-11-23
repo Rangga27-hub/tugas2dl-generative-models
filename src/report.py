@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 from pathlib import Path
 from xml.sax.saxutils import escape
@@ -49,9 +48,11 @@ def main():
     parser.add_argument("--nim")
     parser.add_argument("--kelas")
     parser.add_argument("--repo")
-    parser.add_argument("--notes", help="JSON of human-verified visual observations")
+    parser.add_argument("--notes", help="JSON of inspected visual observations; disclose AI assistance")
     parser.add_argument("--draft", action="store_true")
     args = parser.parse_args()
+    if args.nim is not None and not args.nim.isdecimal():
+        parser.error("NIM must contain digits only")
     cfg = load_config(args.config)
     root = Path(cfg["output_dir"])
     evaluation = {n: read_json(root / "evaluation" / f"{n}.json") for n in ("ae", "sparse_ae", "vae", "gan", "dcgan", "ddpm")}
@@ -59,6 +60,8 @@ def main():
     data = read_json(root / "data.json")
     provenance = read_json(root / "figures" / "provenance.json")
     interpolation = read_json(root / "figures" / "interpolation.json")
+    if not args.draft and any(interpolation.get(n, {}).get("visual_verification") == "failed" for n in ("gan", "dcgan")):
+        parser.error("GAN interpolation endpoint verification failed")
     notes = read_json(args.notes) if args.notes else {}
     required_notes = ("reconstruction", "sampling", "mlp", "interpolation", "training_stability", "ae", "sparse_ae", "vae", "gan", "dcgan", "ddpm")
     if not args.draft:
@@ -266,7 +269,7 @@ def main():
     p("<b>Avatar mobile.</b> Latensi laptop batch64 (ms): " + mobile + ". Anggaran 30ms mobile harus diuji single-image end-to-end pada perangkat target; timing laptop atau pembagian waktu batch dengan64 bukan bukti memenuhi SLA mobile. Pertimbangkan memori, energi, transfer dan konversi model.")
     p(f"<b>Aset visual.</b> DCGAN vs DDPM: FID {evaluation['dcgan']['fid']['FID']:.2f} vs {evaluation['ddpm']['fid']['FID']:.2f}. Pilih sesuai kualitas visual terverifikasi dan biaya sampling pada T tercatat; benchmark grayscale28×28 tidak memvalidasi kemampuan avatar/aset RGB resolusi tinggi. Uji ulang domain, lisensi data dan resolusi target diperlukan.")
     p("<b>Batasan.</b> Satu seed, budget berbeda antararsitektur, seleksi GAN final epoch, FID ImageNet pada domain kecil, serta kemungkinan bias classifier sintetis membatasi generalisasi. Catatan visual yang belum lengkap membuat berkas tetap draft.", "SmallID")
-    p("<b>Referensi.</b> Kingma &amp; Welling (2014), Auto-Encoding Variational Bayes, arXiv:1312.6114. Goodfellow et al. (2014), GANs, arXiv:1406.2661. Radford et al. (2016), DCGAN, arXiv:1511.06434. Ho et al. (2020), DDPM, arXiv:2006.11239. Heusel et al. (2017), TTUR/FID, arXiv:1706.08500. Xiao et al. (2017), Fashion-MNIST, arXiv:1708.07747. Dokumentasi PyTorch, torchvision, TorchMetrics dan torch-fidelity; tautan di README.", "SmallID")
+    p("<b>Referensi.</b> Kingma &amp; Welling (2014), Auto-Encoding Variational Bayes, arXiv:1312.6114. Goodfellow et al. (2014), GANs, arXiv:1406.2661. Radford et al. (2016), DCGAN, arXiv:1511.06434. Ho et al. (2020), DDPM, arXiv:2006.11239. Heusel et al. (2017), TTUR/FID, arXiv:1706.08500. Xiao et al. (2017), Fashion-MNIST, arXiv:1708.07747. Xiao, Kreis &amp; Vahdat (2022), Generative Learning Trilemma, arXiv:2112.07804. Dokumentasi PyTorch, torchvision, TorchMetrics dan torch-fidelity; tautan di README.", "SmallID")
 
     out = root / "report"
     out.mkdir(parents=True, exist_ok=True)

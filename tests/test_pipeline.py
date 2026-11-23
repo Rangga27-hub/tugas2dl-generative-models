@@ -53,6 +53,8 @@ def test_ddpm_schedule_and_sampling(cfg):
     assert torch.isfinite(out).all()
     assert out.min() >= -1.0001 and out.max() <= 1.0001
     assert 4 in chain and 0 in chain
+    repeat = tiny.sample(x, torch.Generator().manual_seed(123))
+    assert torch.equal(out, repeat)
 
 
 def test_transpose_matches_column_formula(cfg):
@@ -61,6 +63,29 @@ def test_transpose_matches_column_formula(cfg):
     w1, w2, w3 = mlp.fc1.weight, mlp.fc2.weight, mlp.fc3.weight
     expected = torch.sigmoid(w1.T @ F.relu(w2.T @ F.relu(w3.T @ one_hot.T))).T.reshape(10, 1, 28, 28)
     assert torch.allclose(mlp.transpose_class(one_hot), expected, atol=1e-6)
+
+
+def test_vae_objective_reduction(cfg):
+    model = build_model("vae", cfg)
+    for parameter in model.parameters():
+        parameter.data.zero_()
+    x = torch.zeros(3, 1, 28, 28)
+    loss, components = objective("vae", model, x, torch.zeros(3, dtype=torch.long), cfg)
+    expected = 784 * torch.log(torch.tensor(2.0))
+    assert torch.allclose(loss, expected, atol=1e-3)
+    assert components["kl_sum"] == 0
+
+
+def test_frozen_classifier_has_no_grad_or_updates(cfg):
+    classifier = build_model("mlp", cfg).eval().requires_grad_(False)
+    decoder = build_model("decoder", cfg)
+    before = [p.detach().clone() for p in classifier.parameters()]
+    opt = torch.optim.Adam(decoder.parameters())
+    loss, _ = objective("decoder", decoder, torch.rand(3, 1, 28, 28), torch.zeros(3, dtype=torch.long), cfg, classifier)
+    loss.backward()
+    opt.step()
+    assert all(p.grad is None for p in classifier.parameters())
+    assert all(torch.equal(a, b) for a, b in zip(before, classifier.parameters()))
 
 
 def test_metrics_identity_and_mean(cfg):

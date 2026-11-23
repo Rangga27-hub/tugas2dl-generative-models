@@ -142,6 +142,9 @@ def fid_metrics(name, model, data, cfg, device, n):
     if not 2 <= n <= 7000:
         raise ValueError("FID needs 2 <= N <= 7000")
     metric = build_fid(device)
+    classifier, classifier_info = load_model("mlp", cfg, device, data)
+    predicted_counts = torch.zeros(10, dtype=torch.long, device=device)
+    confidence_sum = 0.0
     indices = np.random.default_rng(cfg["seed"] + 333).permutation(data.indices["test"])[:n]
     output = Path(cfg["output_dir"]) / "evaluation"
     output.mkdir(parents=True, exist_ok=True)
@@ -159,6 +162,10 @@ def fid_metrics(name, model, data, cfg, device, n):
         noise = make_noise(name, len(real), cfg, device, generator)
         fake = sample(name, model, noise, generator)
         metric.update(fake.repeat(1, 3, 1, 1), real=False)
+        probabilities = classifier(fake).softmax(1)
+        confidence, prediction = probabilities.max(1)
+        predicted_counts += torch.bincount(prediction, minlength=10)
+        confidence_sum += confidence.sum().item()
     score = metric.compute().item()
     sync(device)
     return {"FID": score, "n_real": n, "n_synthetic": n, "seconds": time.perf_counter() - start,
@@ -166,11 +173,21 @@ def fid_metrics(name, model, data, cfg, device, n):
             "feature_dim": 2048, "extractor": "torch-fidelity Inception-v3 via TorchMetrics",
             "preprocessing": "grayscale repeated RGB; float32 [0,1]; normalize=True; extractor handles resize",
             "seed": cfg["seed"] + 13000, "batch_size": batch_size,
+            "predicted_label_proxy": {"counts": predicted_counts.cpu().tolist(),
+                                      "mean_confidence": confidence_sum / n,
+                                      "classifier_sha256": classifier_info["sha256"],
+                                      "warning": "Classifier predictions on synthetic/OOD images are not true labels, nor formal precision/recall or proof of mode coverage"},
             "limitation": "ImageNet features on 28x28 grayscale; finite-sample bias, especially N<=2048; not directly comparable to other pipelines"}
 
 
 def write_table(cfg):
     root = Path(cfg["output_dir"]) / "evaluation"
+    notes_path = Path(cfg["output_dir"]) / "visual_notes.json"
+    if notes_path.exists():
+        import json
+        notes = json.loads(notes_path.read_text(encoding="utf-8"))
+    else:
+        notes = {}
     rows = []
     fid_n = set()
     for name in ("ae", "sparse_ae", "vae", "gan", "dcgan", "ddpm"):
@@ -187,7 +204,7 @@ def write_table(cfg):
                "ms_batch64": result["latency"]["median_ms_batch64"],
                **{key: result.get("reconstruction", {}).get(key, "N/A") for key in ("MSE", "PSNR", "SSIM")},
                "FID": fid.get("FID", "not measured" if name in GENERATORS else "N/A"),
-               "FID_N": fid.get("n_real", "N/A"), "stability": "requires curve and sample inspection"}
+               "FID_N": fid.get("n_real", "N/A"), "stability": notes.get(name) or "requires curve and sample inspection"}
         rows.append(row)
     if len(fid_n) > 1:
         raise ValueError("Do not compare FID with inconsistent N/subsets; reevaluate all generators")

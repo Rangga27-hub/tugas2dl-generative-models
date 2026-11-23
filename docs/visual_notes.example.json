@@ -1,0 +1,16 @@
+{
+  "reviewer": "Isi nama pemeriksa; bila dibantu AI, nyatakan secara transparan",
+  "reconstruction": "",
+  "sampling": "",
+  "mlp": "",
+  "interpolation": "",
+  "training_stability": "",
+  "ae": "",
+  "sparse_ae": "",
+  "vae": "",
+  "gan": "",
+  "dcgan": "",
+  "ddpm": "",
+  "gan_endpoints_visually_verified": false,
+  "github_public_verified": false
+}

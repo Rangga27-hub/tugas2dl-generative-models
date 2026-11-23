@@ -82,12 +82,34 @@ src/evaluate.py            rekonstruksi, latensi, FID, tabel CSV
 src/mlp_experiments.py      bobot, fitur test, lima tahap MLP
 src/figures.py              lima figur dan provenance
 src/run.py                  antrean tahap dan guard pilot
-src/report.py               pembangun laporan dari hasil aktual
+src/report.py              pembangun laporan dari hasil aktual
+src/audit.py               validasi provenance dan ekspor evidence kecil
+src/render_report.py       render PDF untuk inspeksi visual
 tests/test_pipeline.py     smoke arsitektur, formula, metrik, split, resume
 artifacts/fashion/         lokal; log, best/last.pt, evaluation, figures
 ```
 
 Checkpoint besar dan dataset tidak masuk Git. Simpan log/figur/tabel terpilih secara eksplisit ke folder `results/` sebelum publikasi, serta jelaskan lokasi unduh checkpoint bila ingin membagikannya. Jangan commit virtualenv/kredensial. Commit hanya pada tahap nyata yang selesai, bukan merekayasa riwayat.
+
+## Laporan dan paket bukti
+
+Setelah evaluasi dan figur tersedia:
+
+```powershell
+.\.venv\Scripts\python -m src.report --draft
+.\.venv\Scripts\python -m src.render_report artifacts/fashion/report/DRAFT_Laporan.pdf
+.\.venv\Scripts\python -m src.audit --export
+```
+
+Laporan draft dibangun dari angka aktual, bukan template berangka fiktif. Pengujian layout memakai fixture sintetis terisolasi di folder temporer pytest, **bukan hasil eksperimen**. Export audit memeriksa checkpoint, split, N FID, figur, history, dan jumlah halaman; bukti kecil disalin ke `results/` beserta manifest SHA-256, tanpa checkpoint besar.
+
+Isi `docs/visual_notes.example.json` berdasarkan pemeriksaan figur dan snapshot nyata, simpan sebagai `results/visual_notes.json`. Jangan mengisi flag verifikasi `true` sebelum benar-benar memeriksa. Draft dapat memakai `--notes results/visual_notes.json`. Ekspor kandidat final membutuhkan:
+
+```powershell
+.\.venv\Scripts\python -m src.report --nim NIM_ANDA --kelas KELAS_ANDA --repo https://github.com/USER/REPO --notes results/visual_notes.json
+```
+
+Final diblokir bila identitas, catatan visual, verifikasi GitHub/endpoint GAN, target MLP, atau budget training belum lengkap. Audit otomatis tidak menggantikan membuka PDF dan memeriksa tautan publik tanpa login. Jalankan ulang `src.audit --export` setelah mengubah laporan/hasil agar paket evidence tidak usang.
 
 ## Sebelum pengumpulan
 
@@ -107,4 +129,5 @@ Checkpoint besar dan dataset tidak masuk Git. Simpan log/figur/tabel terpilih se
 - Radford et al., *Unsupervised Representation Learning with DCGANs*, 2016, https://arxiv.org/abs/1511.06434
 - Ho et al., *Denoising Diffusion Probabilistic Models*, 2020, https://arxiv.org/abs/2006.11239
 - Heusel et al., *GANs Trained by a Two Time-Scale Update Rule*, 2017, https://arxiv.org/abs/1706.08500
+- Xiao, Kreis & Vahdat, *Tackling the Generative Learning Trilemma with Denoising Diffusion GANs*, 2022, https://arxiv.org/abs/2112.07804
 - [TorchMetrics FID](https://lightning.ai/docs/torchmetrics/stable/image/frechet_inception_distance.html)

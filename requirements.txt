@@ -9,3 +9,4 @@ torch-fidelity==0.4.0
 pytest==9.2.0
 reportlab==5.1.0
 pypdf==7.1.1
+pymupdf==1.28.2

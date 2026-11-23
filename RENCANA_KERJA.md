@@ -15,10 +15,10 @@ Acuan: `PRD_Tugas_DL_Sesi07_Generative_Models (1).md`. Dokumen ini menggantikan 
 
 ## Tahap dan bukti penerimaan
 - [x] Baca PRD revisi; audit awal hardware dan Python.
-- [ ] Environment CUDA lolos forward/backward dan dependensi tercatat.
-- [ ] Split tersimpan dan terbukti disjoint serta reproduksibel.
-- [ ] Uji mini semua model: bentuk, finite loss, update bobot, checkpoint/resume.
-- [ ] Benchmark DDPM satu epoch + sampling batch 64 + extractor FID.
+- [x] Environment CUDA lolos forward/backward dan dependensi tercatat di requirements-lock.txt.
+- [x] Split tersimpan dan terbukti disjoint serta reproduksibel; SHA-256 tercatat pada artifacts/fashion/data.json.
+- [x] Uji mini semua model: bentuk, finite loss, update bobot, checkpoint/resume; tes dan smoke run aktual lolos.
+- [x] Benchmark DDPM satu epoch + sampling batch 64 + extractor FID. Train 7,57 s/epoch; sampling 1,35 s/batch64, estimasi 148 s untuk sampling 7.000 citra, belum extractor.
 - [ ] Training enam model, MLP, frozen decoder; log dan best/last checkpoint.
 - [ ] Lima tahap MLP, termasuk bobot, fitur test dan statistik Gaussian diagonal.
 - [ ] Rekonstruksi seluruh test; FID, timing seragam, sparsity AE.
@@ -27,7 +27,7 @@ Acuan: `PRD_Tugas_DL_Sesi07_Generative_Models (1).md`. Dokumen ini menggantikan 
 - [ ] Identitas dan repo publik dikonfirmasi pengguna; verifikasi tautan tanpa login.
 
 ## Risiko / batasan
-- Instalasi wheel CUDA besar (~3,3 GB) masih perlu selesai dan diuji.
+- Instalasi wheel CUDA (~3,3 GB) selesai dan GPU lolos pengujian. Benchmark dan antrean penuh tercatat pada artifacts/setup/.
 - Target >=88% MLP adalah kriteria, bukan hasil yang dijanjikan.
 - GAN dipilih pada epoch terakhir sesuai budget yang ditetapkan melalui pilot; tidak memilih berdasarkan test/FID final. Evaluasi generator secara terpisah dari rekonstruksi.
 - Resume deterministik pada batas epoch; log per-epoch, optimizer dan RNG disimpan. Waktu crash di tengah epoch tidak dihitung sebagai epoch selesai.

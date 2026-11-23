@@ -2,34 +2,26 @@
 
 **Komang Rangga Hariwijaya · 2802493134 · LA01**
 
-Deep Learning D6421 — Sesi 07
+Fashion-MNIST: AE, Sparse AE, VAE, GAN, DCGAN, DDPM, dan eksperimen MLP. Split 56.000/7.000/7.000, seed42.
 
-Fashion-MNIST: Vanilla AE, Sparse AE, VAE, Vanilla GAN, DCGAN, DDPM, dan lima eksperimen MLP. Split 56.000/7.000/7.000, seed 42.
+## Berkas
 
-## Berkas utama
+- [main.ipynb](main.ipynb) — 12 cell kode tanpa Markdown: model, MLP opsional, tabel dan gambar hasil.
+- [Laporan PDF](results/TUGAS_DL_SESI07_2802493134_Komang%20Rangga%20Hariwijaya.pdf..pdf)
+- [Metrik](results/metrics.csv) · [Hasil MLP](results/mlp_metrics.json)
+- [Lima figur](results/)
 
-- **[main.ipynb](main.ipynb)** — versi ringkas: definisi model, MLP opsional, tabel metrik dan lima gambar tersimpan. Tanpa import `src.*`.
-- **[Laporan PDF](results/report/TUGAS_DL_SESI07_2802493134_Komang%20Rangga%20Hariwijaya.pdf..pdf)** — laporan 11 halaman; nama file dipertahankan.
-- **[Tabel metrik](results/evaluation/comparison.csv)** — hasil test enam model.
-- **[Figur](results/figures/)** — lima visualisasi komparatif.
+## Menjalankan
 
-## Menjalankan notebook
-
-Gunakan Python 3.10 dan kernel environment proyek.
+Python 3.10, lalu:
 
 ```bash
 python -m pip install -r requirements.txt
 python -m jupyter lab main.ipynb
 ```
 
-`main.ipynb` hanya berisi **12 cell kode (383 baris), tanpa cell Markdown**. Default `RUN_MLP=False`: tidak mengunduh data atau training; tabel/gambar dibaca dari hasil tersimpan. Aktifkan MLP hanya jika checkpoint asli tersedia.
+Default `RUN_MLP=False`: tidak mengunduh data atau training. Tabel dan gambar dibaca dari **hasil eksperimen tersimpan**, bukan dihitung ulang. MLP opsional memerlukan checkpoint tepercaya dan indeks split asli.
 
-Untuk **training, resume, atau menghitung ulang metrik/figur**, gunakan skrip modular di `src/`. Notebook ringkas hanya menampilkan hasil tersimpan dan tidak mengklaim melakukan training atau evaluasi ulang.
+Akurasi test MLP **89,76%**. FID7000: VAE **84,55**, GAN **147,31**, DCGAN **19,78**, DDPM **28,62**.
 
-## Hasil singkat
-
-- Akurasi test MLP: **89,76%**.
-- FID (7.000 sintetis vs 7.000 test): VAE **84,55**, GAN **147,31**, DCGAN **19,78**, DDPM **28,62**.
-- Validasi kode: **22 tes lulus**. Hasil berlaku untuk konfigurasi dan satu seed run ini.
-
-Kode modular tetap tersedia di `src/`; konfigurasi di `configs/`. Implementasi dan penyusunan notebook dibantu AI secara transparan. Tinjauan laporan oleh mahasiswa masih menunggu.
+Repo ini adalah versi ringkas untuk penyajian, **bukan pipeline lengkap untuk training ulang**. Source training dan bukti lengkap dicadangkan lokal; riwayat Git tetap dipertahankan. Implementasi dan penyusunan notebook dibantu AI secara transparan; tinjauan mahasiswa masih menunggu.

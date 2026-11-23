@@ -1,0 +1,42 @@
+{
+  "test_accuracy": 0.8975714285714286,
+  "target_accuracy": 0.88,
+  "target_met": true,
+  "n_test": 7000,
+  "weight_shapes": {
+    "W1": [
+      256,
+      784
+    ],
+    "W2": [
+      64,
+      256
+    ],
+    "W3": [
+      10,
+      64
+    ]
+  },
+  "frozen_decoder_metrics": {
+    "MSE": 0.018161627785668575,
+    "PSNR": 18.246691502434867,
+    "SSIM": 0.7028256307372026,
+    "n_test": 7000,
+    "zero_mse_images": 0,
+    "psnr_zero_policy": "clamp MSE to float32 tiny",
+    "aggregation": "mean of per-image metrics; SSIM Gaussian 11x11 sigma1.5, data_range=1"
+  },
+  "vanilla_ae_metrics": {
+    "MSE": 0.0085148936919868,
+    "PSNR": 21.719461127826147,
+    "SSIM": 0.827706698877471,
+    "n_test": 7000,
+    "zero_mse_images": 0,
+    "psnr_zero_policy": "clamp MSE to float32 tiny",
+    "aggregation": "mean of per-image metrics; SSIM Gaussian 11x11 sigma1.5, data_range=1",
+    "latent_near_zero_fraction": 0.31466517857142856,
+    "latent_near_zero_threshold": 0.001
+  },
+  "sampling_distribution": "per-dimension Gaussian from test activations; population std; decoder locked",
+  "sampling_seed": 14042
+}

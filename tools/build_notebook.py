@@ -20,10 +20,6 @@ def add(kind, text, tag=None):
     cells.append(entry)
 
 
-def md(text):
-    add("markdown", text)
-
-
 def code(text, tag=None):
     add("code", text, tag)
 
@@ -40,15 +36,6 @@ def own_definitions(module, names):
     return "\n\n".join(result)
 
 
-md("""
-# Studi Komparatif Generative Models
-**Komang Rangga Hariwijaya · 2802493134 · LA01**
-
-Versi ringkas untuk membaca model, mencoba MLP dari checkpoint, serta melihat hasil eksperimen.
-Definisi model berasal dari proyek sendiri, bukan kode repo contoh. Implementasi dan penyusunan
-dibantu AI. Training dan penghitungan ulang metrik/figur ada di [notebook lengkap](notebooks/full_pipeline.ipynb).
-""")
-md("## 1. Setup dan konfigurasi")
 code("""
 from __future__ import annotations
 import hashlib
@@ -71,11 +58,6 @@ from IPython.display import Image, display
 config = (ROOT / "configs/default.json").read_text(encoding="utf-8").strip()
 code('cfg = json.loads(r\'\'\'\n' + config + '\n\'\'\')\n\nRUN_MLP = False\n', "embedded-config")
 code(own_definitions("common", ["seed_all", "get_device"]) + '\n\nseed_all(cfg["seed"])\ndevice = get_device(cfg)\nprint("Device:", device, "| Dataset:", cfg["dataset"], "| Seed:", cfg["seed"])\n')
-md("""
-## 2. Dataset dan split
-Pool train+test resmi, lalu split bersama **56.000/7.000/7.000**, seed42, batch128.
-Data disimpan uint8 dan diubah ke [0,1] per batch. Data baru dimuat jika `RUN_MLP=True`.
-""")
 code(own_definitions("data", ["DataModule", "to_device"]) + '''
 
 
@@ -90,35 +72,10 @@ if RUN_MLP:
     data = DataModule(cfg)
     print(data.summary())
 ''', "data-definitions")
-md("""
-## 3. Model
-Arsitektur dan parameter sama dengan eksperimen asli. AE dan Sparse AE memakai class yang sama;
-Sparse AE menambahkan penalti L1 pada loss, bukan mengubah kapasitas model.
-""")
-md("### MLP dan decoder\nClassifier784→256→64→10; decoder64→256→784.")
 code(own_definitions("models", ["Classifier", "Decoder"]), "model-definitions")
-md("### Autoencoder dan VAE\nLaten64; VAE memiliki kepala mu/logvar dan reparameterisasi Gaussian.")
 code(own_definitions("models", ["Autoencoder", "VAE"]), "model-definitions")
-md("### Vanilla GAN dan DCGAN\nPrior100, output28×28, tanh untuk generator dan logits untuk discriminator.")
 code(own_definitions("models", ["VanillaGAN", "DCGAN"]), "model-definitions")
-md("### DDPM\nDenoiser U-Net bertimestep; T400, beta linear0,00025..0,05. Factory di bawah memakai konfigurasi ini.")
 code(own_definitions("models", ["TimeEmbedding", "TimeBlock", "Denoiser", "DDPM", "build_model"]), "model-definitions")
-md("""
-## 4. Training
-Training/resume dan smoke test sengaja tidak dimasukkan ke versi ringkas ini.
-Gunakan [full_pipeline.ipynb](notebooks/full_pipeline.ipynb) untuk alur lengkap yang tetap mandiri.
-Default kedua notebook tidak memulai training penuh.
-
-Objective asli: AE MSE; Sparse MSE+L1; VAE BCE+KL; GAN BCEWithLogits; DDPM noise MSE;
-MLP cross-entropy. Hasil pada bagian6–7 berasal dari run tersimpan, bukan training baru.
-""")
-md("""
-## 5. Eksperimen MLP dari checkpoint
-Aktifkan `RUN_MLP=True` untuk memakai checkpoint tepercaya milik proyek.
-Tahap1/4 sudah dilatih dan dikunci; kode ini menghitung akurasi/fitur test, kedua proyeksi transpose,
-rekonstruksi decoder, serta sampling Gaussian diagonal dari statistik fitur test.
-Checkpoint dan split asli tidak disertakan dalam Git. Tanpa checkpoint, bagian ini dilewati.
-""")
 code("""
 def load_trained(name):
     path = Path(cfg["output_dir"]) / name / "best.pt"
@@ -173,25 +130,14 @@ if RUN_MLP:
 else:
     print("MLP dilewati. Aktifkan RUN_MLP setelah checkpoint tepercaya dan split asli tersedia.")
 """, "mlp-action")
-md("""
-## 6. Metrik tersimpan
-Tabel berasal dari eksperimen asli: rekonstruksi seluruh7000 test, FID7000 vs7000,
-latensi median batch64. Angka ini **dibaca dari CSV, bukan dihitung ulang** di notebook ringkas.
-Rumus dan implementasi evaluasi tetap tersedia di notebook lengkap dan `src/evaluate.py`.
-""")
 code("""
 metrics_file = Path("results/evaluation/comparison.csv")
 if metrics_file.exists():
     metrics = pd.read_csv(metrics_file, keep_default_na=False)
     display(metrics)
 else:
-    print("Tabel belum tersedia; jalankan evaluasi melalui notebook lengkap.")
+    print("Tabel metrik belum tersedia.")
 """, "saved-metrics")
-md("""
-## 7. Lima visualisasi tersimpan
-Rekonstruksi, random sampling, eksperimen MLP, interpolasi, serta kurva/reverse trajectory.
-Gambar berikut adalah **hasil tersimpan**; regenerasinya ada di notebook lengkap.
-""")
 code("""
 figure_names = [
     "figure_1_reconstruction", "figure_2_sampling", "figure_3_mlp",
@@ -208,7 +154,7 @@ for name in figure_names:
 notebook = {"cells": cells,
             "metadata": {"kernelspec": {"name": "python3", "display_name": "Python 3 (ipykernel)", "language": "python"},
                          "language_info": {"name": "python", "version": "3.10.9"},
-                         "description": "Concise own-project model notebook; training and fresh metrics remain in full_pipeline.ipynb"},
+                         "description": "Code-only model notebook; optional MLP inference and display of saved experiment results"},
             "nbformat": 4, "nbformat_minor": 5}
 (ROOT / "main.ipynb").write_text(json.dumps(notebook, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
 print("Wrote main.ipynb:", len(cells), "cells;", sum(len(c["source"].splitlines()) for c in cells if c["cell_type"] == "code"), "code lines")

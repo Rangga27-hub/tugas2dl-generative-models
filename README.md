@@ -22,9 +22,9 @@ python -m pip install -r requirements.txt
 python -m jupyter lab main.ipynb
 ```
 
-`main.ipynb` memakai **12 cell kode (383 baris)**. Default `RUN_MLP=False`: tidak mengunduh data atau training; tabel/gambar dibaca dari hasil tersimpan. Aktifkan MLP hanya jika checkpoint asli tersedia.
+`main.ipynb` hanya berisi **12 cell kode (383 baris), tanpa cell Markdown**. Default `RUN_MLP=False`: tidak mengunduh data atau training; tabel/gambar dibaca dari hasil tersimpan. Aktifkan MLP hanya jika checkpoint asli tersedia.
 
-Untuk **training, resume, atau menghitung ulang metrik/figur**, buka [notebook lengkap](notebooks/full_pipeline.ipynb). Seluruh kemampuan sebelumnya tetap tersedia di sana; versi ringkas tidak mengklaim melakukan perhitungan tersebut.
+Untuk **training, resume, atau menghitung ulang metrik/figur**, gunakan skrip modular di `src/`. Notebook ringkas hanya menampilkan hasil tersimpan dan tidak mengklaim melakukan training atau evaluasi ulang.
 
 ## Hasil singkat
 

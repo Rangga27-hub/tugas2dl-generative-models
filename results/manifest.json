@@ -52,8 +52,8 @@
   "mlp/history.csv": "ece6ab5720b9110332279a6013433708de680f3990f84f82f306f34395bda2a5",
   "mlp/history.json": "3f522a670e49ebc163e65fb8e64c624cf497b54335fdc7ba7f7e895d77bfa395",
   "mlp_experiments/results.json": "d42a7c53b4026b7562f05abba8cb59cc1f727da2384d68851167c90f85174900",
-  "report/audit.json": "9e504d8b6b0c79e1f3d1743059bd9195ec3119f744a374be52a8182fb683b5d9",
-  "report/DRAFT_Laporan.pdf": "156ba2a5199b2e4b78b08ac304128751498696456c8dbd01e059590abecd1f88",
+  "report/audit.json": "2ed080a9c9c8913f20ddf9c5667caa1407723bbd5491647f32c0d33b05ae22f8",
+  "report/TUGAS_DL_SESI07_2802493134_Komang Rangga Hariwijaya.pdf..pdf": "02398ab63dce669836cafe865b56e6f299495f29e7d1c66e03a385a5f52b1131",
   "sparse_ae/config.json": "01c0cc6f02284caaa0dd08bbe85e6e5d9d7727d47588793e582519c4cae421ec",
   "sparse_ae/environment.json": "fb457babe488d63ca1df128a788031081cc6917d4c0e075f52388325918acaa7",
   "sparse_ae/history.csv": "62e1c7be10daabe4cff4c0d508c0404becd4df17cf4a9611f139fe8f61c724b3",
@@ -66,5 +66,5 @@
   "protocol/FashionMNIST_split_seed42.npz": "7292422712319657732b8e2636091a27a06b0a293aa1d729efc36be1802a4618",
   "protocol/config.json": "e1a1e8a18f3e7f987e4399c1772794e212fd660180e587d996e5d2255a9226ff",
   "protocol/requirements-lock.txt": "d5dc142df2eded004a0f3815f30973ffacd20a6419d69bf20b3644fed1384127",
-  "protocol/tests.xml": "ebf0fc4009894a8b9144fb54b243a73d44f305e828b5145170df56b490c414ac"
+  "protocol/tests.xml": "4160c0378628d749eba442fda9202e2e4f7f32552714ef33b4d0528b14ddd108"
 }

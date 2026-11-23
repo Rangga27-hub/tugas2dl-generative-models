@@ -1,11 +1,14 @@
 {
-  "pdf": "artifacts\\fashion\\report\\DRAFT_Laporan.pdf",
+  "pdf": "artifacts\\fashion\\report\\TUGAS_DL_SESI07_2802493134_Komang Rangga Hariwijaya.pdf..pdf",
   "pages": 11,
   "draft": true,
   "page_count_ok": true,
   "fid_n": 7000,
   "nim_present": true,
-  "kelas_present": false,
+  "kelas_present": true,
   "repo_supplied": true,
-  "visual_notes_supplied": true
+  "visual_notes_supplied": true,
+  "class": "LA01",
+  "review_status": "pending_user_review",
+  "document_edit": "Class updated; left footer removed; user filename and page numbers preserved"
 }

@@ -64,25 +64,28 @@
   "mlp_test_accuracy": 0.8975714285714286,
   "mlp_target_met": true,
   "report": {
-    "pdf": "artifacts\\fashion\\report\\DRAFT_Laporan.pdf",
+    "pdf": "artifacts\\fashion\\report\\TUGAS_DL_SESI07_2802493134_Komang Rangga Hariwijaya.pdf..pdf",
     "pages": 11,
     "draft": true,
     "page_count_ok": true,
     "fid_n": 7000,
     "nim_present": true,
-    "kelas_present": false,
+    "kelas_present": true,
     "repo_supplied": true,
     "visual_notes_supplied": true,
+    "class": "LA01",
+    "review_status": "pending_user_review",
+    "document_edit": "Class updated; left footer removed; user filename and page numbers preserved",
     "verified_pages": 11,
-    "sha256": "156ba2a5199b2e4b78b08ac304128751498696456c8dbd01e059590abecd1f88"
+    "sha256": "02398ab63dce669836cafe865b56e6f299495f29e7d1c66e03a385a5f52b1131"
   },
   "tests": {
-    "tests": 18,
+    "tests": 22,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
-  "code_commit_at_audit": "bc3dfec5af6a7e65043727f57d13f67155d92db5",
+  "code_commit_at_audit": "b629b9800b5dce447ce29341b78b56b2d41925a7",
   "source_sha256_at_audit": {
     "src/__init__.py": "e99e9f60e6496cbbb6cc663a19b8a405280cfec9b07c433e55043d5d2749e4e7",
     "src/audit.py": "99bd19c315edf223544bb15104504675719d0ce535607417d8e769a656b90234",
@@ -94,7 +97,7 @@
     "src/mlp_experiments.py": "595b577cff159873fcd3c216742aa14dfc2386e4e207839488490ca137ba1f9f",
     "src/models.py": "2a5872daa166cb350c71a19fbc86819c2c06b09bb80a1c2f54e195226064c615",
     "src/render_report.py": "2da2ad0b386d7a47e9f417fc98a65eec4b99dc298429d067c720e6943868699b",
-    "src/report.py": "e75d5e927195edeae5daa7c8d45df6f0f329a75f9449371b5c03453152c15b24",
+    "src/report.py": "306bf8305b42b487cdc3cee18601cd3a42bb0034010b14b8ad009b56d05ad6c3",
     "src/run.py": "542f5f5865b6e7514ee753a050d910f9c31524c6332a5c3a5814d576db6584c7",
     "src/train.py": "dc231093d26e9c55391dee33a3604b4b4f5d901a52c62e7361d6abaf29dceea4"
   }
